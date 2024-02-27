@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscribe</title>
+</head>
+<body>
+    <h1>Subscription Page</h1>
+    <p>Subscribe to {{ app_name }} as {{ subscriber_name }}</p>
+    <button id="subscribeButton">Subscribe Now</button>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var apiEndpoint = "{{ api_endpoint|safe }}";
+            
+            // Attach click event handler to the button
+            document.getElementById('subscribeButton').onclick = function() {
+                console.log("API Endpoint: ", apiEndpoint);
+                window.open(apiEndpoint, '_blank');
+                return false; // Prevent default action
+            };
+        });
+    </script>
+</body>
+</html>
