@@ -95,7 +95,6 @@ class SubscribeView(View):
 #-----Status and UnSubscribe------------#
 
 
-
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -112,7 +111,7 @@ def send_api_request(url, headers, data):
         return str(e)
 
 class StatusAPIView(View):
-    def post(self, request, app_name, phone):
+    def handle_request(self, request, app_name, phone):
         subscriber = get_object_or_404(Subscriber, Contact=phone)
         app = get_object_or_404(ChargingSDKs, APP_Name=app_name)
 
@@ -132,7 +131,7 @@ class StatusAPIView(View):
             "password": password,
             "subscriberId": f"tel:{masked_msisdn}"
         }
-        
+
         url = 'https://api.digimart.store/subscription/subscriberChargingInfo'
         request_data_str = send_api_request(url, headers, data)
 
@@ -145,8 +144,14 @@ class StatusAPIView(View):
 
         return JsonResponse({"message": "Status API response updated successfully"})
 
-class UnsubscribeAPIView(View):
+    def get(self, request, app_name, phone):
+        return self.handle_request(request, app_name, phone)
+
     def post(self, request, app_name, phone):
+        return self.handle_request(request, app_name, phone)
+
+class UnsubscribeAPIView(View):
+    def handle_request(self, request, app_name, phone):
         subscriber = get_object_or_404(Subscriber, Contact=phone)
         app = get_object_or_404(ChargingSDKs, APP_Name=app_name)
 
@@ -167,7 +172,7 @@ class UnsubscribeAPIView(View):
             "subscriberId": f"tel:{masked_msisdn}",
             "action": "0"
         }
-        
+
         url = 'https://api.digimart.store/subs/unregistration'
         request_data_str = send_api_request(url, headers, data)
 
@@ -179,3 +184,9 @@ class UnsubscribeAPIView(View):
             return HttpResponseBadRequest("API Response not found for given request_id")
 
         return JsonResponse({"message": "Unsubscribe API response updated successfully"})
+
+    def get(self, request, app_name, phone):
+        return self.handle_request(request, app_name, phone)
+
+    def post(self, request, app_name, phone):
+        return self.handle_request(request, app_name, phone)
