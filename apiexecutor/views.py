@@ -58,6 +58,7 @@ class SubscribeView(View):
         api_secret = app.API_Secret
         api_key = app.API_Key
         redirect_url = app.redirect_url
+        print("APP's Redirect URL", redirect_url)
 
         # Generating current UTC time and a random request ID
         current_time_utc = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
